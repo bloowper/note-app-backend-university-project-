@@ -9,7 +9,6 @@ import {
   Query,
 } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
-import { TaskStatus } from "./task.model.enum";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { GetTaskFilterDto } from "./dto/get-task-filter.dto";
 import { UpdateTaskStatusDto } from "./dto/update-task-status.dto";
@@ -19,14 +18,10 @@ import { TaskEntity } from "./task.entity";
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
-  //@Get()
-  //getTasks(@Query() filterDto: GetTaskFilterDto): Task[] {
-  //  if (Object.keys(filterDto).length) {
-  //    return this.tasksService.getTasksWithFIlters(filterDto);
-  //  } else {
-  //    return this.tasksService.getAllTasks();
-  //  }
-  //}
+  @Get()
+  getTasks(@Query() filterDto: GetTaskFilterDto): Promise<TaskEntity[]> {
+    return this.tasksService.getTasks(filterDto);
+  }
 
   @Get("/:id")
   getTaskById(@Param("id") id: string): Promise<TaskEntity> {
