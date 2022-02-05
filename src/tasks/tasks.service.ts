@@ -30,32 +30,6 @@ export class TasksService {
   //  }
   //}
   //
-  //createTask(createTaskDto: CreateTaskDto): Task {
-  //  //restructuring syntax
-  //  //Destructuring assignment
-  //  const { title, description } = createTaskDto;
-  //  const task: Task = {
-  //    id: uuidv4(),
-  //    title,
-  //    description,
-  //    status: TaskStatus.IN_PROGRESS,
-  //  };
-  //  this.tasks.push(task);
-  //  return task;
-  //}
-  //
-  //getTaskById(id: string): Task | undefined {
-  //  const found = this.tasks.find((task) => task.id === id);
-  //  if (!found) {
-  //    throw new NotFoundException("Object with given id not exist");
-  //  }
-  //  return found;
-  //}
-  //
-  //deleteTaskById(id: string) {
-  //  const found = this.getTaskById(id);
-  //  this.tasks = this.tasks.filter((task) => task.id != found.id);
-  //}
   //
   //updateTaskStatus(id: string, status: TaskStatus) {
   //  const task = this.getTaskById(id);
@@ -72,14 +46,23 @@ export class TasksService {
     }
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
-    const { title, description } = createTaskDto;
-    const task = this.taskRepository.create({
-      title,
-      description,
-      status: TaskStatus.OPEN,
-    });
+  createTask(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
+    return this.taskRepository.createTask(createTaskDto);
+  }
 
-    return await this.taskRepository.save(task);
+  async deleteTaskById(id: string): Promise<void> {
+    const result = await this.taskRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(
+        `Tash with id ${id} not exist, cannot be deleted`
+      );
+    }
+  }
+
+  async updateTaskStatus(id: string, status: TaskStatus) {
+    const task = await this.getTaskById(id);
+    task.status = status;
+    await this.taskRepository.save(task);
+    return task;
   }
 }
