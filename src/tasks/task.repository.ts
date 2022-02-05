@@ -23,7 +23,10 @@ export class TaskRepository extends Repository<TaskEntity> {
       query.andWhere("task.status = :status", { status: status });
     }
     if (search) {
-
+      query.andWhere(
+        "LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)",
+        { search: `%${search}%` }
+      );
     }
     const task = await query.getMany();
     return task;
