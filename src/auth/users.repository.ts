@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 import { UserEntity } from "./entity/user.entity";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
-import { genSalt,hash } from "bcrypt";
+import { genSalt, hash } from "bcrypt";
 
 import {
   ConflictException,
@@ -15,7 +15,7 @@ export class UsersRepository extends Repository<UserEntity> {
     const hashedPassword = await this.hashPassword(password);
     const userEntity = this.create({
       username,
-      password:hashedPassword
+      password: hashedPassword,
     });
     try {
       await this.save(userEntity);
@@ -24,7 +24,7 @@ export class UsersRepository extends Repository<UserEntity> {
     }
   }
 
-  private async hashPassword(password:string):Promise<string> {
+  private async hashPassword(password: string): Promise<string> {
     const salt = await genSalt();
     return await hash(password, salt);
   }
