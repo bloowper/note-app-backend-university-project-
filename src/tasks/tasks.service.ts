@@ -13,8 +13,8 @@ export class TasksService {
     @InjectRepository(TaskRepository) private taskRepository: TaskRepository
   ) {}
 
-  getTasks(filterDto: GetTaskFilterDto): Promise<TaskEntity[]> {
-    return this.taskRepository.getTasks(filterDto);
+  getTasks(filterDto: GetTaskFilterDto, user: UserEntity): Promise<TaskEntity[]> {
+    return this.taskRepository.getTasks(filterDto,user);
   }
 
   async getTaskById(id: string): Promise<TaskEntity> {

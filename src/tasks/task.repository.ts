@@ -16,20 +16,24 @@ export class TaskRepository extends Repository<TaskEntity> {
       title,
       description,
       status: TaskStatus.OPEN,
-      user
+      user,
     });
     return await this.save(task);
   }
 
-  async getTasks(filterDto: GetTaskFilterDto): Promise<TaskEntity[]> {
+  async getTasks(
+    filterDto: GetTaskFilterDto,
+    user: UserEntity
+  ): Promise<TaskEntity[]> {
     const { search, status } = filterDto;
     const query = this.createQueryBuilder("task");
+    query.where({ user });
     if (status) {
       query.andWhere("task.status = :status", { status: status });
     }
     if (search) {
       query.andWhere(
-        "LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)",
+        "(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))",
         { search: `%${search}%` }
       );
     }
