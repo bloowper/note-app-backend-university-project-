@@ -37,7 +37,7 @@ export class TasksService {
   }
 
   async deleteTaskById(id: string, user: UserEntity): Promise<void> {
-    const result = await this.taskRepository.delete({id, user});
+    const result = await this.taskRepository.delete({ id, user });
     if (result.affected === 0) {
       throw new NotFoundException(
         `Tash with id ${id} not exist, cannot be deleted`

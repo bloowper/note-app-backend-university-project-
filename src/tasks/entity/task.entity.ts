@@ -21,3 +21,8 @@ export class TaskEntity {
   @Exclude({ toPlainOnly: true})
   user: UserEntity;
 }
+
+//TODO
+// need to be added
+// @CreateDateColumn({type: "timestamp"})
+// createdAt: Date;
